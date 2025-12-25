@@ -1,11 +1,34 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { serverUrl } from "../main";
+
+
+
 
 const Login = () => {
  let navigate = useNavigate();
   let [show,setShow] = useState(false);
+  
+    let [email,setEmail] = useState("");
+    let [password,setPassword] = useState("");
   const handleClick = ()=>{
     setShow(prev=>!prev);
+  }
+
+   const handleLogin = async (e)=>{
+    e.preventDefault();
+   console.log("SENDING:", { email,password });
+    try{
+    let result = await axios.post(`${serverUrl}/api/auth/login`,{
+    email,password
+    },{withCredentials: true});
+    console.log(result.data);
+    } catch(error){
+ console.log("STATUS:", error.response.status);
+  console.log("MESSAGE:", error.response.data.message);
+    }
+    
   }
   return (
     <div className='w-full h-screen bg-slate-200 flex justify-center items-center '>
@@ -13,11 +36,11 @@ const Login = () => {
       <div className='w-full h-50 bg-[#00c7c4] rounded-b-[30%] shadow-gray-400 shadow-lg flex items-center justify-center'>
         <h1 className='text-gray-600 font-bold text-[30px]'>Welcome to <span className='text-white'>Connectly</span></h1>
       </div>
-      <form className='w-full flex flex-col gap-7 items-center'>
+      <form className='w-full flex flex-col gap-7 items-center' onSubmit={handleLogin}>
         
-        <input type="email" placeholder='email' className='w-[90%] h-[90%] outline-none border-3 border-[#00c7c4] px-5 py-2.5 bg-white rounded-lg shadow-gray-400 shadow-lg'  />
+        <input type="email" placeholder='email' className='w-[90%] h-[90%] outline-none border-3 border-[#00c7c4] px-5 py-2.5 bg-white rounded-lg shadow-gray-400 shadow-lg' onChange={(e)=>{setEmail(e.target.value)}} value={email} />
         <div className='relative overflow-hidden py-2 w-[90%] h-[90%] border-3 border-[#00c7c4]  rounded-lg shadow-gray-400 shadow-lg'>
-          <input type={`${show?"text":"password"}`} placeholder='password' className='w-full h-full outline-none  px-5 py-2.5 bg-white' />
+          <input type={`${show?"text":"password"}`} placeholder='password' className='w-full h-full outline-none  px-5 py-2.5 bg-white' onChange={(e)=>{setPassword(e.target.value)}}  value={password}/>
         <span className=' font-semibold absolute top-2 right-5 text-[19px] text-[#00c7c4] cursor-pointer' onClick={handleClick}>{`${show?"hide":"show"}`}</span>
          </div>
         <button className=' transition-all px-8 py-3 bg-[#00c7c4] rounded-3xl shadow-gray-400 shadow-lg font-bold text-gray-200 text-[20px] w-50 hover:shadow-inner'>Login</button>
