@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { serverUrl } from "../main";
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserData } from '../redux/userSlice';
 
 
 
@@ -12,21 +14,34 @@ const Login = () => {
   
     let [email,setEmail] = useState("");
     let [password,setPassword] = useState("");
+    let [loading, setLoading] = useState(false);
+    let [err, setErr] = useState(false);
+    let dispatch = useDispatch();
+    let {userData} = useSelector(state=>state.user);
+    console.log("userData",userData);
   const handleClick = ()=>{
     setShow(prev=>!prev);
   }
 
    const handleLogin = async (e)=>{
     e.preventDefault();
+    setLoading(true);
    console.log("SENDING:", { email,password });
     try{
     let result = await axios.post(`${serverUrl}/api/auth/login`,{
     email,password
     },{withCredentials: true});
+     dispatch(setUserData(result.data));
     console.log(result.data);
+    setEmail('');
+    setPassword('');
+    setLoading(false);
+    setErr("");
     } catch(error){
  console.log("STATUS:", error.response.status);
   console.log("MESSAGE:", error.response.data.message);
+  setLoading(false);
+  setErr(error.response.data.message);
     }
     
   }
@@ -43,7 +58,8 @@ const Login = () => {
           <input type={`${show?"text":"password"}`} placeholder='password' className='w-full h-full outline-none  px-5 py-2.5 bg-white' onChange={(e)=>{setPassword(e.target.value)}}  value={password}/>
         <span className=' font-semibold absolute top-2 right-5 text-[19px] text-[#00c7c4] cursor-pointer' onClick={handleClick}>{`${show?"hide":"show"}`}</span>
          </div>
-        <button className=' transition-all px-8 py-3 bg-[#00c7c4] rounded-3xl shadow-gray-400 shadow-lg font-bold text-gray-200 text-[20px] w-50 hover:shadow-inner'>Login</button>
+         {err && <p className='text-red-600'>{err}</p>}
+        <button className=' transition-all px-8 py-3 bg-[#00c7c4] rounded-3xl shadow-gray-400 shadow-lg font-bold text-gray-200 text-[20px] w-50 hover:shadow-inner' disabled={loading}>{loading?"Loading...":"Login"}</button>
         <p className=' cursor-pointer font-semibold text-gray-600' onClick={()=>navigate("/signup")}>Doesn't Have an Account ?<span className='text-[#00c7c4] text-[20px]'>Sign up</span></p>
       </form>
       </div>
