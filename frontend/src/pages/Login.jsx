@@ -17,8 +17,8 @@ const Login = () => {
     let [loading, setLoading] = useState(false);
     let [err, setErr] = useState(false);
     let dispatch = useDispatch();
-    let {userData} = useSelector(state=>state.user);
-    console.log("userData",userData);
+   
+    
   const handleClick = ()=>{
     setShow(prev=>!prev);
   }
@@ -31,6 +31,7 @@ const Login = () => {
     let result = await axios.post(`${serverUrl}/api/auth/login`,{
     email,password
     },{withCredentials: true});
+    console.log("login result ", result);
      dispatch(setUserData(result.data));
     console.log(result.data);
     setEmail('');

@@ -14,7 +14,7 @@ const SignUp = () => {
   let [loading, setLoading] = useState(false);
   let [err,setErr] = useState('');
   let dispatch = useDispatch();
-  let {userData} = useSelector(state=> state.user)
+  
 
   const handleClick = ()=>{
     setShow(prev=>!prev);
@@ -28,9 +28,10 @@ const SignUp = () => {
     let result = await axios.post(`${serverUrl}/api/auth/signup`,{
 userName,email,password
     },{withCredentials: true});
+    console.log("result data",result.data);
     dispatch(setUserData(result.data));
-    console.log(userData);
     
+   
     setUserName('');
     setEmail('');
     setPassword('');
@@ -53,11 +54,11 @@ userName,email,password
         <h1 className='text-gray-600 font-bold text-[30px]'>Welcome to <span className='text-white'>Connectly</span></h1>
       </div>
       <form className='w-full flex flex-col gap-7 items-center' onSubmit={handleSignUp}>
-        <input type="text" placeholder='username' className='w-[90%] h-[90%] outline-none border-3 border-[#00c7c4] px-5 py-2.5 bg-white rounded-lg shadow-gray-400 shadow-lg' onChange={(e)=>{setUserName(e.target.value);
+        <input type="text" placeholder='username' className='w-[90%] h-[90%] outline-none border-3 border-[#00c7c4] px-5 py-2.5 bg-white rounded-lg shadow-gray-400 shadow-lg text-gray-700' onChange={(e)=>{setUserName(e.target.value);
         }} value={userName}/>
-        <input type="email" placeholder='email' className='w-[90%] h-[90%] outline-none border-3 border-[#00c7c4] px-5 py-2.5 bg-white rounded-lg shadow-gray-400 shadow-lg' onChange={(e)=>{setEmail(e.target.value)}} value={email} />
+        <input type="email" placeholder='email' className='w-[90%] h-[90%] outline-none border-3 border-[#00c7c4] px-5 py-2.5 bg-white rounded-lg shadow-gray-400 shadow-lg text-gray-700' onChange={(e)=>{setEmail(e.target.value)}} value={email} />
         <div className='relative overflow-hidden py-2 w-[90%] h-[90%] border-3 border-[#00c7c4]  rounded-lg shadow-gray-400 shadow-lg'>
-          <input type={`${show?"text":"password"}`} placeholder='password' className='w-full h-full outline-none  px-5 py-2.5 bg-white' onChange={(e)=>{setPassword(e.target.value)}} value={password} />
+          <input type={`${show?"text":"password"}`} placeholder='password' className=' text-gray-700 w-full h-full outline-none  px-5 py-2.5 bg-white' onChange={(e)=>{setPassword(e.target.value)}} value={password} />
         <span className=' font-semibold absolute top-2 right-5 text-[19px] text-[#00c7c4] cursor-pointer' onClick={handleClick}>{`${show?"hide":"show"}`}</span>
          </div>
          {err && <p className='text-red-600'>{err}</p>}
