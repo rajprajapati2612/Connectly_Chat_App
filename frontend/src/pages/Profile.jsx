@@ -49,6 +49,7 @@ try {
   });
   console.log("user name update ",result.data);
   dispatch(setUserData(result.data));
+  navigate('/home');
 } catch (error) {
   console.log("name update error ",error);
 }
@@ -56,8 +57,8 @@ try {
  
   return (
     <div className='w-full h-screen bg-slate-200 flex flex-col justify-center items-center gap-6'>
-      <div>
-        <IoIosArrowRoundBack className='w-10 h-10 fixed top-5 left-5 text-gray-600' onClick={()=>navigate("/")}/>
+      <div className='fixed top-5 left-5 cursor-pointer' onClick={()=>navigate("/")}>
+        <IoIosArrowRoundBack className='w-10 h-10  text-gray-600' />
       </div>
      <div className=' bg-white rounded-full border-3 border-[#00c7c4] shadow-gray-400 shadow-lg  relative'>
        <div className=' overflow-hidden w-50 h-50 rounded-full flex justify-center items-center'>

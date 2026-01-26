@@ -31,7 +31,7 @@ userName,email,password
     console.log("result data",result.data);
     dispatch(setUserData(result.data));
     
-   
+    navigate("/profile");
     setUserName('');
     setEmail('');
     setPassword('');

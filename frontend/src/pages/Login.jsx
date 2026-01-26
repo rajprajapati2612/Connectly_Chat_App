@@ -34,6 +34,7 @@ const Login = () => {
     console.log("login result ", result);
      dispatch(setUserData(result.data));
     console.log(result.data);
+    navigate("/");
     setEmail('');
     setPassword('');
     setLoading(false);

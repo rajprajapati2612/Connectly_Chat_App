@@ -7,15 +7,16 @@ import { TbLogout2 } from "react-icons/tb";
 import axios from 'axios';
 import { serverUrl } from '../main';
 import { useNavigate } from 'react-router-dom';
-import { setOtherUsers, setUserData } from '../redux/userSlice';
+import { setOtherUsers, setUserData, setSelectedUser } from '../redux/userSlice';
 
 const Sidebar = () => {
 
-    let {userData,otherUsers} = useSelector(state=>state.user);
+    let {userData,otherUsers,selectedUser} = useSelector(state=>state.user);
     let [search,setSearch] = useState(false);
     let dispatch = useDispatch();
     let navigate = useNavigate();
     console.log("otherUsers data",otherUsers)
+
 
     const handleLogout = async ()=>{
       try {
@@ -30,15 +31,15 @@ const Sidebar = () => {
       }
     }
   return (
-    <div className='lg:w-[30%] w-full h-screen bg-slate-200'>
+    <div className={`lg:w-[30%] lg:block ${!selectedUser?"block":"hidden"} w-full h-screen bg-slate-200`}>
       <div className='shadow-gray-500 bg-[#00c7c4] cursor-pointer shadow-lg overflow-hidden w-15 h-15 rounded-full flex justify-center items-center fixed bottom-5 left-2.5' onClick={handleLogout}>
            <TbLogout2 className='w-6 h-6 text-white'/>
        </div>
       <div className='w-full h-75 bg-[#00c7c4] rounded-b-[30%] shadow-gray-400 shadow-lg flex flex-col  justify-center px-5'>
         <h1 className='text-white font-bold text-2xl'>Connectly</h1>
         <div className='w-full flex justify-between items-center'>
-            <h1 className='text-gray-700 font-bold text-2xl'>Hello,  {userData.name.charAt(0).toUpperCase() + userData.name.slice(1)}</h1>
-             <div className='shadow-gray-500 shadow-lg overflow-hidden w-15 h-15 rounded-full flex justify-center items-center'>
+            <h1 className='text-gray-700 font-bold text-2xl'>Hello,  {userData.name.charAt(0).toUpperCase() + userData.name.slice(1) || "user"}</h1>
+             <div className='shadow-gray- bg-white shadow-lg overflow-hidden w-15 h-15 rounded-full flex justify-center items-center'>
          <img src={userData.image || DP } className='w-1/1 h-1/1 '  />
        </div>
 
@@ -54,9 +55,9 @@ const Sidebar = () => {
         <input type="text" placeholder='search users...' className='w-full h-1/1 p-2.5 outline-0 border-0 text-[17px]'/>
         <RxCross1 className='text-2xl cursor-pointer font-bold' onClick={()=>setSearch(false)}/>
         </form>}
-            {otherUsers?.map((user)=>{
+            {!search && otherUsers?.map((user)=>{
            return   <div>
-              <div className='shadow-gray-500 mt-2.5 shadow-lg overflow-hidden w-15 h-15 rounded-full flex justify-center items-center'>
+              <div className='shadow-gray-500 bg-white mt-2.5 shadow-lg overflow-hidden w-15 h-15 rounded-full flex justify-center items-center'>
          <img src={user.image || DP } className='w-1/1 h-1/1 '  />
          
        </div>
@@ -65,6 +66,20 @@ const Sidebar = () => {
             })}
         </div>
       </div>
+     <div className='w-full h-[60vh] overflow-auto flex flex-col gap-5 items-center mt-5 px-3'>
+      {otherUsers?.map((user)=>{
+           return   <div className='w-full h-17 flex  items-center  gap-5 bg-white shadow-gray-500 shadow-lg rounded-full cursor-pointer hover:bg-[#83f3f5]' onClick={()=>dispatch(setSelectedUser(user))}>
+              <div className='shadow-gray-600 bg-white ml-1 shadow-lg overflow-hidden w-15 h-15 rounded-full flex justify-center items-center'>
+         <img src={user.image || DP } className='w-1/1 h-1/1 '  />
+         
+       </div>
+        <h1 className='text-xl font-semibold text-gray-600'>{user.name || user.userName}</h1>
+       </div>
+       
+            })}
+           
+
+     </div>
     </div>
   )
 }
