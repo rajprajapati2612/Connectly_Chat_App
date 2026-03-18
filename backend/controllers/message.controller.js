@@ -1,6 +1,8 @@
 import uploadOnCloudinary from "../config/cloudinary.js";
 import Conversation from "../models/conversation.model.js"
 import Message from "../models/message.model.js";
+
+import {getReceiverSocketId,io} from "../socket/socket.js"
 export const sendMessage = async (req,res)=>{
     try {
          let   sender = req.userId;
@@ -28,6 +30,15 @@ export const sendMessage = async (req,res)=>{
           await  conversation.save();
 
          }
+         const receiverSocketId = getReceiverSocketId(receiver);
+         console.log("receiver socket:",receiverSocketId);
+         console.log("receiver",receiver);
+         if(receiverSocketId){
+            console.log("message send successfully ");
+            console.log("newmesssage",newMessage );
+             io.to(receiverSocketId).emit("newMessage",newMessage);
+           
+         }
          return res.status(201).json(newMessage);
     } catch (error) {
         return res.status(500).json({message:`send message error ${error}`});
@@ -42,7 +53,7 @@ export const getMessages = async (req,res)=>{
     let {receiver} = req.params
     let conversation = await Conversation.findOne({
             participants:{$all:[sender,receiver]}
-         }).populate("message")
+         }).populate("messages")
          if(!conversation){
             return res.status(400).json({message:"conversation not found"});
          }

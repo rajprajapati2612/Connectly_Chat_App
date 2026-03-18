@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { serverUrl } from "../main";
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserData } from '../redux/userSlice';
+import { setOtherUsers, setUserData } from '../redux/userSlice';
 
 
 
@@ -33,6 +33,7 @@ const Login = () => {
     },{withCredentials: true});
     console.log("login result ", result);
      dispatch(setUserData(result.data));
+     
     console.log(result.data);
     navigate("/");
     setEmail('');
@@ -40,10 +41,10 @@ const Login = () => {
     setLoading(false);
     setErr("");
     } catch(error){
- console.log("STATUS:", error.response.status);
-  console.log("MESSAGE:", error.response.data.message);
+ 
+  console.log("MESSAGE:", error.message);
   setLoading(false);
-  setErr(error.response.data.message);
+  setErr(error.message);
     }
     
   }
