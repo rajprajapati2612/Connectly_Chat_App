@@ -137,7 +137,7 @@
 
 
 
-import React, { useEffect, useRef, useState } from 'react'    //new code from blackboxai
+import React, { useEffect, useRef, useState } from 'react'    
 import { IoIosArrowRoundBack } from "react-icons/io";         
 import DP from "../assets/DP.webp"
 import { useDispatch, useSelector } from "react-redux";
@@ -239,10 +239,10 @@ const MessageArea = () => {
             </h1>
           </div>
 
-          <div className='w-full h-140 gap-5 flex flex-col py-7 px-5 overflow-auto' onClick={() => setshowPicker(false)}>
+          <div className='w-full h-[78vh] gap-5 flex flex-col py-10 px-5 overflow-auto' onClick={() => setshowPicker(false)}>
             {showPicker && (
               <div className='absolute bottom-25 left-5'>
-                <EmojiPicker width={250} height={350} className='shadow-lg shadow-gray-700' onEmojiClick={onEmojiClick} />
+                <EmojiPicker width={250} height={350} className='shadow-lg shadow-gray-700 z-100' onEmojiClick={onEmojiClick} />
               </div>
             )}
 

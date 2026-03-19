@@ -11,7 +11,7 @@ import { setOtherUsers, setUserData, setSelectedUser } from '../redux/userSlice'
 
 const Sidebar = () => {
 
-    let {userData,otherUsers,selectedUser} = useSelector(state=>state.user);
+    let {userData,otherUsers,selectedUser,onlineUsers} = useSelector(state=>state.user);
     let [search,setSearch] = useState(false);
     let dispatch = useDispatch();
     let navigate = useNavigate();
@@ -31,7 +31,7 @@ const Sidebar = () => {
       }
     }
   return (
-    <div className={`lg:w-[30%] lg:block ${!selectedUser?"block":"hidden"} w-full h-screen bg-slate-200`}>
+    <div className={`lg:w-[30%] lg:block overflow-hidden ${!selectedUser?"block":"hidden"} w-full h-screen bg-slate-200`}>
       <div className='shadow-gray-500 bg-[#00c7c4] cursor-pointer shadow-lg overflow-hidden w-15 h-15 rounded-full flex justify-center items-center fixed bottom-5 left-2.5' onClick={handleLogout}>
            <TbLogout2 className='w-6 h-6 text-white'/>
        </div>
@@ -44,7 +44,7 @@ const Sidebar = () => {
        </div>
 
         </div>
-        <div className='w-full flex items-center gap-5'>
+        <div className='w-full flex items-center gap-5 overflow-y-auto'>
 
           {!search && <div className='shadow-gray-500 bg-gray-200 cursor-pointer shadow-lg overflow-hidden w-15 h-15 rounded-full flex justify-center items-center' onClick={()=>setSearch(true)}>
            <IoMdSearch className='w-6 h-6 text-gray-700'/>
@@ -56,11 +56,13 @@ const Sidebar = () => {
         <RxCross1 className='text-2xl cursor-pointer font-bold' onClick={()=>setSearch(false)}/>
         </form>}
             {!search && otherUsers?.map((user)=>{
-           return   <div>
-              <div className='shadow-gray-500 bg-white mt-2.5 shadow-lg overflow-hidden w-15 h-15 rounded-full flex justify-center items-center'>
+           return   onlineUsers?.includes(user._id) &&
+              <div className='relative rounded-full shadow-gray-500 bg-white shadow-lg'>
+              <div className='   overflow-hidden w-15 h-15 rounded-full flex justify-center items-center'>
          <img src={user.image || DP } className='w-1/1 h-1/1 '  />
-         
-       </div>
+        
+              </div>
+        <span className='w-3 h-3 rounded-full bg-[#09f463] absolute bottom-1.5  right-0 shadow-gray-500  shadow-md'></span>
        </div>
 
             })}
