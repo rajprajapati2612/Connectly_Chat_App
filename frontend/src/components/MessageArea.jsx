@@ -165,8 +165,12 @@ const MessageArea = () => {
   const [frontendImage, setfrontendImage] = useState(null);
   const [backendImage, setbackendImage] = useState(null);
 
+
+
   const image = useRef();
 
+  
+  
   const handleSendMessage = async (e) => {
     e.preventDefault();
 
@@ -190,6 +194,8 @@ const MessageArea = () => {
       setInput("");
       setfrontendImage(null);
       setbackendImage(null);
+
+      
     } catch (error) {
       console.log("send Message error", error);
     }
@@ -221,6 +227,8 @@ const MessageArea = () => {
     };
   }, [socket, dispatch]);
 
+  
+
   return (
     <div className={`lg:w-[70%] lg:block ${selectedUser ? "flex" : "hidden"} w-full h-screen bg-slate-200 border-l-4 border-gray-300 relative`}>
       {selectedUser && (
@@ -239,9 +247,9 @@ const MessageArea = () => {
             </h1>
           </div>
 
-          <div className='w-full h-[78vh] gap-5 flex flex-col py-10 px-5 overflow-auto' onClick={() => setshowPicker(false)}>
+          <div  className='w-full h-[78vh] gap-5 flex flex-col py-10 px-5 overflow-auto     ' onClick={() => setshowPicker(false)}>
             {showPicker && (
-              <div className='absolute bottom-25 left-5'>
+              <div className='absolute bottom-25 left-5 z-50'>
                 <EmojiPicker width={250} height={350} className='shadow-lg shadow-gray-700 z-100' onEmojiClick={onEmojiClick} />
               </div>
             )}
@@ -256,6 +264,9 @@ const MessageArea = () => {
                   ? <SenderMessage key={msg._id} image={msg.image} message={msg.message} />
                   : <ReceiverMessage key={msg._id} image={msg.image} message={msg.message} />
               )}
+
+                
+               
           </div>
         </div>
       )}
@@ -280,13 +291,22 @@ const MessageArea = () => {
 
             <input type="file" accept='image/*' ref={image} hidden onChange={handleImage} />
 
-            <input
+            {/* <input
               type="text"
               className='w-full h-full px-2.5 outline-none border-0 text-xl text-white placeholder:text-white bg-transparent'
               placeholder='Message'
               onChange={(e) => setInput(e.target.value)}
               value={input}
-            />
+            /> */}
+
+            <textarea
+              className="w-full px-2.5 py-2 outline-none border-0 text-xl text-white 
+             placeholder:text-white bg-transparent resize-none break-words"
+         placeholder="Message"
+                    onChange={(e) => setInput(e.target.value)}
+                value={input}
+               rows={1}
+                   />
 
             <div onClick={() => image.current.click()}>
               <FaImages className='w-6 h-6 text-gray-200 cursor-pointer' />

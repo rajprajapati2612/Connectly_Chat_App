@@ -19,6 +19,7 @@ const Profile = () => {
  let [name,setName] = useState(userData?.name || "");
  let [frontendImage,setFrontendImage] = useState(userData?.image || DP);
  let [backendImage,setBackendImage] = useState(null);
+ let [loading,setLoading]  = useState(false);
 
  useEffect(() => {
     if (userData) {
@@ -39,6 +40,7 @@ setFrontendImage(URL.createObjectURL(file));
  const handleProfile = async (e)=>{
 e.preventDefault();
 try {
+  setLoading(true);
   let formData = new FormData();
   formData.append("name",name);
   if(backendImage){
@@ -49,7 +51,9 @@ try {
   });
   console.log("user name update ",result.data);
   dispatch(setUserData(result.data));
-  navigate('/home');
+
+  navigate('/');
+  setLoading(false);
 } catch (error) {
   console.log("name update error ",error);
 }
@@ -75,7 +79,7 @@ try {
       <input type="text" readOnly  className=' text-gray-500 w-[90%] h-13 outline-none border-3 border-[#00c7c4] px-5 py-2.5 bg-white rounded-lg shadow-gray-400 shadow-lg' value={userData?.userName || ""} />
       
       <input type="email" readOnly className=' text-gray-500 w-[90%] h-13 outline-none border-3 border-[#00c7c4] px-5 py-2.5 bg-white rounded-lg shadow-gray-400 shadow-lg' value={userData?.email || ""} />
-      <button  className='cursor-pointer  transition-all px-8 py-3 bg-[#00c7c4] rounded-3xl shadow-gray-400 shadow-lg font-bold text-gray-200 text-[20px] w-50 hover:shadow-inner'>Save Profile</button>
+      <button  className='cursor-pointer  transition-all px-8 py-3 bg-[#00c7c4] rounded-3xl shadow-gray-400 shadow-lg font-bold text-gray-200 text-[20px] w-50 hover:shadow-inner' disabled={loading}>{loading?"Loading...":"Save Profile"}</button>
      </form>
     </div>
   )
