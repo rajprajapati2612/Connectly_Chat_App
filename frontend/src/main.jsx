@@ -7,7 +7,7 @@ import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import {Provider} from 'react-redux'
 import {store} from "./redux/store.js"
-export const serverUrl = "http://localhost:8000"
+export const serverUrl = "https://connectly-chat-app-z7ja.onrender.com"
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
